@@ -1,0 +1,57 @@
+doctrine:
+  dbal:
+    logging: true
+    url: '%env(resolve:DATABASE_URL)%'
+    types:
+
+    profiling_collect_backtrace: '%kernel.debug%'
+    server_version: '14'
+
+  orm:
+    auto_generate_proxy_classes: true
+    default_entity_manager: default
+    entity_managers:
+      default:
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+
+        mappings:
+          Character:
+            type: xml
+            dir: '%kernel.project_dir%/src/Infrastructure/Database/Doctrine/Mapping/Character'
+            prefix: 'Domains\Character\Models'
+            is_bundle: false
+          Location:
+            type: xml
+            dir: '%kernel.project_dir%/src/Infrastructure/Database/Doctrine/Mapping/Location'
+            prefix: 'Domains\Location\Models'
+            is_bundle: false
+          Episode:
+            type: xml
+            dir: '%kernel.project_dir%/src/Infrastructure/Database/Doctrine/Mapping/Episode'
+            prefix: 'Domains\Episode\Models'
+            is_bundle: false
+
+# Konfiguracja dla środowiska testowego
+when@test:
+  dbal:
+    dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+
+# Konfiguracja dla środowiska produkcyjnego
+when@prod:
+  orm:
+    auto_generate_proxy_classes: false
+    proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+    query_cache_driver:
+      type: pool
+      pool: doctrine.system_cache_pool
+    result_cache_driver:
+      type: pool
+      pool: doctrine.result_cache_pool
+
+framework:
+  cache:
+    pools:
+      doctrine.result_cache_pool:
+        adapter: cache.app
+      doctrine.system_cache_pool:
+        adapter: cache.system

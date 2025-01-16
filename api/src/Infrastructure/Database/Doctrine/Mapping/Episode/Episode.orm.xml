@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+https://raw.githubusercontent.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity
+            name="Domains\Episode\Models\Episode"
+            table="episodes"
+    >
+        <id name="id" column="id" type="integer">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="apiId" column="api_id" type="integer" nullable="false"/>
+        <field name="name" column="name" type="string" length="255" nullable="false"/>
+        <field name="airDate" column="air_date" type="string" length="100" nullable="false"/>
+        <field name="episode" column="episode" type="string" length="10" nullable="false"/>
+        <field name="url" column="url" type="string" length="255" nullable="false"/>
+        <field name="createdAt" column="created_at" type="datetime_immutable" nullable="false"/>
+
+        <many-to-many field="characters" target-entity="Domains\Character\Models\Character" mapped-by="episodes">
+            <join-table name="character_episodes">
+                <join-columns>
+                    <join-column name="episode_id" referenced-column-name="id" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="character_id" referenced-column-name="id" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+    </entity>
+
+</doctrine-mapping>

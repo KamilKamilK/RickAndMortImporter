@@ -1,0 +1,10 @@
+controllers:
+  resource:
+    path: '../src/Application/Http/Controllers/'
+    namespace: 'App\Http\Controllers'
+  type: attribute
+
+character_list:
+  path: api/characters
+  controller: 'App\Http\Controllers\CharacterController::list'
+  methods: [ 'GET' ]

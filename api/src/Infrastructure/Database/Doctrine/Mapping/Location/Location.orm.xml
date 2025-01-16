@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+https://raw.githubusercontent.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity
+            name="Domains\Location\Models\Location"
+            table="locations"
+    >
+        <id name="id" column="id" type="integer">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="apiId" column="api_id" type="integer" nullable="false"/>
+        <field name="name" column="name" type="string" length="255" nullable="false"/>
+        <field name="type" column="type" type="string" length="255" nullable="true"/>
+        <field name="dimension" column="dimension" type="string" length="255" nullable="true"/>
+        <field name="url" column="url" type="string" length="255" nullable="false"/>
+        <field name="createdAt" column="created_at" type="datetime_immutable" nullable="false"/>
+
+        <one-to-many field="residents" target-entity="Domains\Character\Models\Character" mapped-by="location">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+    </entity>
+
+</doctrine-mapping>

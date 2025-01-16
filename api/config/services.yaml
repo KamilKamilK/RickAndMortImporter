@@ -1,0 +1,59 @@
+parameters:
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\:
+    resource: '../src/Application/*'
+    exclude:
+      - '../src/Application/Kernel.php'
+
+  App\Http\Controllers\:
+    resource: '../src/Application/Http/Controllers/'
+    tags: [ 'controller.service_arguments' ]
+
+  App\Events\EventListenerProvider:
+    arguments:
+      $eventDispatcher: '@Domains\Common\Events\EventDispatcher'
+    calls:
+      - method: addListener
+        arguments:
+          - 'Domains\Character\Events\CharacterCreated'
+          - '@Domains\Character\Events\Listeners\CharacterCreatedListener'
+#      - method: addListener
+#        arguments:
+#          - 'Domains\Episode\Events\EpisodeCreated'
+#          - '@Domains\Episode\Events\Listeners\CharacterCreatedListener'
+
+  App\Console\Commands\ImportCharacterCommand:
+    tags: [ 'console.command' ]
+
+  Domains\:
+    resource: '../src/Domains/'
+
+  Domains\Common\Events\EventDispatcher:
+    public: true
+    factory: [ 'Domains\Common\Events\EventDispatcher', instance ]
+    arguments:
+      - '@logger'
+
+  Infrastructure\:
+    resource: '../src/Infrastructure/'
+
+  Infrastructure\Database\Doctrine\Repositories\Character\DoctrineCharacterRepository:
+    arguments:
+      $class: 'Domains\Character\Models\Character'
+
+  Infrastructure\Database\Doctrine\Repositories\Location\DoctrineLocationRepository:
+    arguments:
+      $class: 'Domains\Location\Models\Location'
+
+  Infrastructure\Database\Doctrine\Repositories\Episode\DoctrineEpisodeRepository:
+    arguments:
+      $class: 'Domains\Episode\Models\Episode'
+
+  Infrastructure\Database\Doctrine\Repositories\:
+    resource: '../src/Infrastructure/Database/Doctrine/Repositories/*'
+    public: true

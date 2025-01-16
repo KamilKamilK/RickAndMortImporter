@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+https://raw.githubusercontent.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity
+            name="Domains\Character\Models\Character"
+            table="characters"
+    >
+        <id name="id" column="id" type="integer">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="apiId" column="api_id" type="integer" nullable="false"/>
+        <field name="name" column="name" type="string" length="255" nullable="false"/>
+        <field name="status" column="status" type="string" length="100" nullable="false"/>
+        <field name="species" column="species" type="string" length="255" nullable="false"/>
+        <field name="type" column="type" type="string" length="255" nullable="true"/>
+        <field name="gender" column="gender" type="string" length="50" nullable="false"/>
+        <field name="image" column="image" type="text" nullable="false"/>
+        <field name="url" column="url" type="text" nullable="false"/>
+        <field name="createdAt" column="created_at" type="datetime_immutable" nullable="false"/>
+
+        <many-to-one field="location" target-entity="Domains\Location\Models\Location" inversed-by="residents">
+            <join-column name="location_id" referenced-column-name="id" nullable="true"/>
+        </many-to-one>
+
+        <many-to-one field="origin" target-entity="Domains\Location\Models\Location">
+            <join-column name="origin_id" referenced-column-name="id" nullable="true"/>
+        </many-to-one>
+
+        <many-to-many field="episodes" target-entity="Domains\Episode\Models\Episode">
+            <join-table name="character_episodes">
+                <join-columns>
+                    <join-column name="character_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="episode_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+    </entity>
+</doctrine-mapping>
